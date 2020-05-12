@@ -1,0 +1,29 @@
+one menu for only finding
+second menu table with line from menu#1
+
+menu#1 only logo, line finder and setting circle
+when hit any short change to its color and make a block (like gmail)
+
+line has shadow (is floating)
+
+setting
+- theme/own background
+
+menu#2
+- sorting url, short, usage
+
+each url one color (changable)
+changes saved line at the top when changes were made
+each input text has value of its origin so there is no button for edit
+- edit button appear when change is made (in a line of change)
+- button for save all
+
+cookies, whne first time, tutorial
+
+delete - checkboxes
+
+export option - csv
+
+background img saves in hashed (id + check or duplicates - no need to stores duplicates)
+
+feel free to donate poor student, feel free to tweak your own background, feel free to fork my github user
