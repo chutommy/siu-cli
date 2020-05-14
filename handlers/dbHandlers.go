@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"os/exec"
 	"runtime"
+	"speedit/models"
 	"strings"
-	"urlshortener/models"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"

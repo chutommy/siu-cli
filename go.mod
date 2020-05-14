@@ -1,4 +1,4 @@
-module urlshortener
+module speedit
 
 go 1.14
 

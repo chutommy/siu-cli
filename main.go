@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"net/http"
-	"urlshortener/handlers"
-	"urlshortener/models"
+	"speedit/handlers"
+	"speedit/models"
 
 	"github.com/gorilla/mux"
 )
