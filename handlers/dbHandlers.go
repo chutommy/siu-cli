@@ -2,17 +2,16 @@ package handlers
 
 import (
 	"fmt"
-	"io"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os/exec"
-	"runtime"
 	"speedit/models"
 	"strings"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
+	"github.com/pkg/browser"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -51,10 +50,24 @@ func RunURLsHandler() http.HandlerFunc {
 				log.Fatal(err)
 			}
 
-			if err := openTab(w, u); err != nil {
+			if err := browser.OpenURL(u.Origin); err != nil {
 				log.Fatal(err)
 			}
 		}
+
+		html, err := readHTML("close.gohtml")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		var t = template.Must(template.New("closing").Parse(string(html)))
+		t.Execute(w, nil)
+
+		/*
+			if _, err = w.Write(html); err != nil {
+				/log.Fatal(err)
+			}
+		*/
 	}
 }
 
@@ -120,25 +133,6 @@ func parseURLs(strURLs string) []string {
 	}
 
 	return strings.Split(strURLs, " ")
-}
-
-// opens new tab with urls
-func openTab(w io.Writer, u models.Url) error {
-	var cmd string
-	var args []string
-
-	switch runtime.GOOS {
-	case "windows":
-		cmd = "cmd"
-		args = []string{"/c", "start"}
-	case "darwin":
-		cmd = "open"
-	default: // "linux", "freebsd", "openbsd", "netbsd"
-		cmd = "xdg-open"
-	}
-
-	args = append(args, u.Origin)
-	return exec.Command(cmd, args...).Start()
 }
 
 // get template
