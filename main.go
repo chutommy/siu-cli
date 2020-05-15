@@ -12,11 +12,12 @@ import (
 func main() {
 	ctx := context.Background()
 	client := handlers.InitDB(ctx, models.MongoURL)
+	defer client.Disconnect(ctx)
 
 	// routing
 	r := mux.NewRouter()
 	r.HandleFunc("/", handlers.HomeHandler()).Methods("GET")
-	r.HandleFunc("/q/{shorts}", handlers.RunURLsHandler()).Methods("POST")
+	r.HandleFunc("/", handlers.RunURLsHandler()).Methods("POST")
 
 	set := r.PathPrefix("/set").Subrouter()
 	set.HandleFunc("/", handlers.HomeSettingsHandler()).Methods("GET")
@@ -25,6 +26,4 @@ func main() {
 	set.HandleFunc("/d/{id}", handlers.DURLHandler()).Methods("POST")
 
 	http.ListenAndServe(":8080", r)
-
-	defer client.Disconnect(ctx)
 }

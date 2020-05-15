@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os/exec"
@@ -17,13 +18,27 @@ import (
 
 // HomeHandler renders home view with a search line
 func HomeHandler() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {}
+	return func(w http.ResponseWriter, r *http.Request) {
+		html, err := readHTML("home.gohtml")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if _, err = w.Write(html); err != nil {
+			log.Fatal(err)
+		}
+	}
 }
 
 // RunURLsHandler runs all shorts, if not found skip
 func RunURLsHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		strURLs := parseURLs(mux.Vars(r)["shorts"])
+		strURLs := parseURLs(strings.TrimSpace(r.FormValue("shorts")))
+
+		if strURLs == nil {
+			http.Redirect(w, r, "https://www.google.com", http.StatusSeeOther)
+			return
+		}
 
 		// runs each url if found
 		for _, strURL := range strURLs {
@@ -98,10 +113,16 @@ func DURLHandler() http.HandlerFunc {
 	}
 }
 
+// split string
 func parseURLs(strURLs string) []string {
-	return strings.Split(strURLs, ",")
+	if strURLs == "" {
+		return nil
+	}
+
+	return strings.Split(strURLs, " ")
 }
 
+// opens new tab with urls
 func openTab(w io.Writer, u models.Url) error {
 	var cmd string
 	var args []string
@@ -118,4 +139,15 @@ func openTab(w io.Writer, u models.Url) error {
 
 	args = append(args, u.Origin)
 	return exec.Command(cmd, args...).Start()
+}
+
+// get template
+func readHTML(gohtml string) ([]byte, error) {
+	path := "templates/" + gohtml
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		return []byte{}, fmt.Errorf("Could not read from file %v, error: %v", path, err)
+	}
+
+	return data, nil
 }
