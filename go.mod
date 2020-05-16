@@ -1,3 +1,3 @@
-module github.com/chutified/speedit
+module github.com/chutified/siu
 
 go 1.14
