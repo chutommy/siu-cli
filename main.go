@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "siu/cmd"
+import "github.com/chutified/siu/cmd"
 
 func main() {
 	cmd.Execute()

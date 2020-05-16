@@ -17,8 +17,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/spf13/cobra"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
@@ -29,13 +30,19 @@ var cfgFile string
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "siu",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Short: "Siu can open multiple URLs in the default browser with just a few keystrokes",
+	Long: `Siu is a tool for powerusers to quickly open one or multiple urls with a given shortcut.
+	
+For example 'gg' can be used for search engine, 'gm' for email provider, 'yt', 'fb', 'gh', etc.
+It is recommended to use two or three keystrokes for each shortcut (depends on your usage),
+but feel free to use it as it suits your needs and preferences.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+Each item stores:
+	- [id]			the ID of the url
+	- [url]			original url, which is opened on call
+	= [short]		shorten entry of the url
+	- [description] short description of the url's destination
+	- [usage]		the number of uses of the url`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
