@@ -1,3 +1,4 @@
+// Package cmd provides control for the SIU
 /*
 Copyright © 2020 NAME HERE <EMAIL ADDRESS>
 
@@ -16,9 +17,15 @@ limitations under the License.
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
+	"runtime"
+	"strings"
 
+	"github.com/chutified/siu/db"
+	"github.com/chutified/siu/models"
 	"github.com/spf13/cobra"
 
 	homedir "github.com/mitchellh/go-homedir"
@@ -30,22 +37,18 @@ var cfgFile string
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "siu",
-	Short: "Siu can open multiple URLs in the default browser with just a few keystrokes",
-	Long: `Siu is a tool for powerusers to quickly open one or multiple urls with a given shortcut.
-	
-For example 'gg' can be used for search engine, 'gm' for email provider, 'yt', 'fb', 'gh', etc.
-It is recommended to use two or three keystrokes for each shortcut (depends on your usage),
-but feel free to use it as it suits your needs and preferences.
+	Short: "Siu is a very fast and minimalist urls opener",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		motions, err := getMotionsToRun()
+		if err != nil {
+			return err
+		}
 
-Each item stores:
-	- [id]			the ID of the url
-	- [url]			original url, which is opened on call
-	= [short]		shorten entry of the url
-	- [description] short description of the url's destination
-	- [usage]		the number of uses of the url`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
+		if err := runMotions(motions); err != nil {
+			return err
+		}
+		return nil
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -95,4 +98,70 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
+}
+
+func getMotionsToRun() ([]models.Motion, error) {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Printf("\n")
+
+	// get input and trim it
+	fmt.Printf("RUN: ")
+	items, err := reader.ReadString('\n')
+	if err != nil {
+		return []models.Motion{}, fmt.Errorf("Could not read what to run: %v", err)
+	}
+	items = strings.TrimSpace(strings.TrimSuffix(items, "\n"))
+	fmt.Printf("\n")
+
+	// search for each motion
+	searches := strings.Split(items, " ")
+	var motions []models.Motion
+	for _, search := range searches {
+
+		// skip if extra spaces
+		if search == "" {
+			continue
+		}
+		m, err := db.ReadOne(search)
+		if err != nil {
+			// if not found log and skip
+			fmt.Printf("Motion %v not found...\n", search)
+			continue
+		}
+
+		motions = append(motions, m)
+	}
+
+	return motions, nil
+}
+
+func runMotions(motions []models.Motion) error {
+	for _, m := range motions {
+		fmt.Printf("Openning %v ...\n", m.URL)
+		if err := openBrowser(m.URL); err != nil {
+			fmt.Printf("Could not open: %v ...\n", m.URL)
+		}
+	}
+	fmt.Printf("\n")
+	return nil
+}
+
+func openBrowser(url string) error {
+	var err error
+
+	switch runtime.GOOS {
+	case "linux":
+		err = exec.Command("xdg-open", url).Start()
+	case "windows":
+		err = exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start()
+	case "darwin":
+		err = exec.Command("open", url).Start()
+	default:
+		err = fmt.Errorf("unsupported platform")
+	}
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
