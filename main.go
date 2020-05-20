@@ -15,8 +15,15 @@ limitations under the License.
 */
 package main
 
-import "github.com/chutified/siu/cmd"
+import (
+	"github.com/chutified/siu/cmd"
+	"github.com/chutified/siu/db"
+)
 
 func main() {
+	// to be able to read and write documents
+	db.Connect()
+	defer db.Disconnect()
+
 	cmd.Execute()
 }

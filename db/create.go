@@ -11,9 +11,6 @@ import (
 // Create creates a new motion and
 // returns an error if any is occured
 func Create(m models.Motion) error {
-	connect()
-	defer disconnect()
-
 	// new motion
 	motionBSON := bson.D{
 		{Key: "id", Value: m.ID},

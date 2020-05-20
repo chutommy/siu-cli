@@ -12,9 +12,6 @@ import (
 
 // ReadOne finds the motion by any string and returns it
 func ReadOne(search string) (models.Motion, error) {
-	connect()
-	defer disconnect()
-
 	// sort desc by the usage
 	opts := options.Find().SetSort(bson.D{{Key: "usage", Value: -1}})
 
@@ -52,9 +49,6 @@ func ReadOne(search string) (models.Motion, error) {
 
 // ReadAll return all motions in the collection
 func ReadAll() ([]models.Motion, error) {
-	connect()
-	defer disconnect()
-
 	// sort desc by usage
 	opts := options.Find().SetSort(bson.D{{Key: "usage", Value: -1}})
 

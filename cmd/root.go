@@ -102,7 +102,6 @@ func initConfig() {
 
 func getMotionsToRun() ([]models.Motion, error) {
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Printf("\n")
 
 	// get input and trim it
 	fmt.Printf("RUN: ")
@@ -141,6 +140,7 @@ func runMotions(motions []models.Motion) error {
 		if err := openBrowser(m.URL); err != nil {
 			fmt.Printf("Could not open: %v ...\n", m.URL)
 		}
+		db.IncMotionUsage(m)
 	}
 	fmt.Printf("\n")
 	return nil

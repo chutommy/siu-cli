@@ -11,12 +11,7 @@ import (
 
 // Update replace the motion with certain Name with a new motion
 func Update(id string, newMotion models.Motion) error {
-	connect()
-	defer disconnect()
-
-	// sort desc by the usage
 	opts := options.Update().SetUpsert(true)
-
 	// if names equal
 	filter := bson.D{{Key: "id", Value: id}}
 

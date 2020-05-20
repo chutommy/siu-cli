@@ -16,7 +16,8 @@ var client *mongo.Client
 var ctx context.Context
 var motionsCollection *mongo.Collection
 
-func connect() {
+// Connect connects to the remote DB
+func Connect() {
 	ctx = context.Background()
 
 	clientOpts := options.Client().ApplyURI(mongoURL)
@@ -30,6 +31,7 @@ func connect() {
 	motionsCollection = client.Database("speed_it_up").Collection("motions")
 }
 
-func disconnect() {
+// Disconnect disconnect from the remote DB
+func Disconnect() {
 	client.Disconnect(ctx)
 }
