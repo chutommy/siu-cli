@@ -62,15 +62,9 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.siu.yaml)")
 
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
+	// flags
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
@@ -100,6 +94,8 @@ func initConfig() {
 	}
 }
 
+// getMotionsToRun reads the user's input
+// and does the magic :)
 func getMotionsToRun() ([]models.Motion, error) {
 	reader := bufio.NewReader(os.Stdin)
 
@@ -134,6 +130,7 @@ func getMotionsToRun() ([]models.Motion, error) {
 	return motions, nil
 }
 
+// runMotions takes the motions and handles them
 func runMotions(motions []models.Motion) error {
 	for _, m := range motions {
 		fmt.Printf("Openning %v ...\n", m.URL)
@@ -146,6 +143,8 @@ func runMotions(motions []models.Motion) error {
 	return nil
 }
 
+// openBrowser opens the url in a new browser
+// If a browser window exists it opens the url in a new tab
 func openBrowser(url string) error {
 	var err error
 
