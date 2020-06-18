@@ -18,9 +18,9 @@ command|action
 -------|------
 `siu`|Opens the URL with motions (supports multiple inputs)
 `siu list`|Lists all motions
-`siu set del [motion]`|Deletes one or multiple motions
-`siu set new [motion]`|Creates a new motion
-`siu set upd [motion]`|Updates the motion
+`siu set del`|Deletes one or multiple motions
+`siu set new` |Creates a new motion
+`siu set upd`|Updates the motion
 
 All __motions__ can be identified by its _name_, _url_, _shortcut_ or _id_.
 
