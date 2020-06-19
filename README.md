@@ -12,7 +12,7 @@ $ go get github.com/chutified/siu
 
 ## Usage
 
-Run '$ siu -h` for the help.
+Run `$ siu -h` for the help.
 
 command|action
 -------|------
