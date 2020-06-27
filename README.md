@@ -34,12 +34,12 @@ All __motions__ can be identified by their _name_, _url_, _shortcut_ or _id_.
 
 ![screenshot of siu list](https://raw.githubusercontent.com/chutified/siu/master/img/01_siu_list.png)
 
-### `$ siu` command (launch new browser):
+### `$ siu` command (launch the new browser):
 
 ![screenshot of siu run](https://raw.githubusercontent.com/chutified/siu/master/img/02_siu_run.png)
 ![screenshot of opened tabs](https://raw.githubusercontent.com/chutified/siu/master/img/03_siu_browser.png)
 
-### `$ siu` command (if browser exists, opens in a new tab):
+### `$ siu` command (if the browser exists, opens in a new tab):
 
 ![screenshot of siu run](https://raw.githubusercontent.com/chutified/siu/master/img/04_siu_run.png)
 ![screenshot of opened tabs](https://raw.githubusercontent.com/chutified/siu/master/img/05_siu_browser.png)
