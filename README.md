@@ -22,7 +22,7 @@ command|action
 `$ siu set new` |Creates a new motion
 `$ siu set upd`|Updates a motion
 
-All __motions__ can be identified by its _name_, _url_, _shortcut_ or _id_.
+All __motions__ can be identified by their _name_, _url_, _shortcut_ or _id_.
 
 ## Screenshots of CLI
 
