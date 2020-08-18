@@ -32,25 +32,27 @@ import (
 var delCmd = &cobra.Command{
 	Use:   "del",
 	Short: "Deletes one or multiple motions",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		// get motion to get id
-		m, err := getMotionToDel()
-		if err != nil {
-			return err
-		}
-
-		if err := db.Delete(m.ID); err != nil {
-			return err
-		}
-
-		printDeleted(m)
-
-		return nil
-	},
+	RunE:  del,
 }
 
 func init() {
 	setCmd.AddCommand(delCmd)
+}
+
+func del(cmd *cobra.Command, args []string) error {
+	// get motion to get id
+	m, err := getMotionToDel()
+	if err != nil {
+		return err
+	}
+
+	if err := db.Delete(m.ID); err != nil {
+		return err
+	}
+
+	printDeleted(m)
+
+	return nil
 }
 
 func getMotionToDel() (models.Motion, error) {
@@ -68,6 +70,7 @@ func getMotionToDel() (models.Motion, error) {
 	return db.ReadOne(search)
 }
 
+// logging
 func printDeleted(m models.Motion) {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)

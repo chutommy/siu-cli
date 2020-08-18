@@ -33,28 +33,30 @@ import (
 var newCmd = &cobra.Command{
 	Use:   "new",
 	Short: "Creates a new motion",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		m, err := getNewMotionToCreate()
-		if err != nil {
-			return err
-		}
-
-		if colision, bad := db.CheckCollision(m, models.Motion{}); bad {
-			return fmt.Errorf("Invalid motion. Reusing values: %v", colision)
-		}
-
-		if err := db.Create(m); err != nil {
-			return err
-		}
-
-		printCreated(m)
-
-		return nil
-	},
+	RunE:  new,
 }
 
 func init() {
 	setCmd.AddCommand(newCmd)
+}
+
+func new(cmd *cobra.Command, args []string) error {
+	m, err := getNewMotionToCreate()
+	if err != nil {
+		return err
+	}
+
+	if colision, bad := db.CheckCollision(m, models.Motion{}); bad {
+		return fmt.Errorf("Invalid motion. Reusing values: %v", colision)
+	}
+
+	if err := db.Create(m); err != nil {
+		return err
+	}
+
+	printCreated(m)
+
+	return nil
 }
 
 func getNewMotionToCreate() (models.Motion, error) {
