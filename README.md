@@ -4,7 +4,7 @@ The Siu is a CLI application which can be launched with only three keystrokes "s
 
 ## Installation
 
-Requires `go v1.13` or higher (to install https://golang.org/dl/).
+Requires Go to be installed (https://golang.org/dl/).
 
 ```bash
 $ go get github.com/chutified/siu-cli
