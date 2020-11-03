@@ -1,6 +1,6 @@
 # Siu
 
-The Siu is a CLI application which can be launched with only three keystrokes "siu". It allows you to use shortcuts to start a browser with a specific URL. If a browser window is already opened, it only creates a new tab.
+The Siu is a productivity boost CLI tool which can be launched with only three keystrokes: "siu". It allows you to use shortcuts to start a browser with a specific URL. If a browser window is already opened, it only creates a new tab.
 
 ## Installation
 
