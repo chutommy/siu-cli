@@ -35,6 +35,10 @@ import (
 
 var cfgFile string
 
+var (
+	errUnsupportedPlatform = errors.New("platform is not supported")
+)
+
 // rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{
 	Use:   "siu",
@@ -114,8 +118,9 @@ func getMotionsToRun() ([]models.Motion, error) {
 
 	// search for each motion
 	searches := strings.Split(items, " ")
-	var motions []models.Motion
-	for _, search := range searches {
+	motions := make([]models.Motion, len(searches))
+
+	for i, search := range searches {
 		// skip if extra spaces
 		if search == "" {
 			continue
@@ -129,7 +134,7 @@ func getMotionsToRun() ([]models.Motion, error) {
 			continue
 		}
 
-		motions = append(motions, m)
+		motions[i] = m
 	}
 
 	return motions, nil
@@ -167,7 +172,7 @@ func openBrowser(url string) error {
 	case "darwin":
 		err = exec.Command("open", url).Start()
 	default:
-		err = errors.New("unsupported platform")
+		err = errUnsupportedPlatform
 	}
 
 	if err != nil {

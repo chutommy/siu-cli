@@ -1,5 +1,6 @@
-// Package cmd provides control for the SIU
 /*
+Package cmd provides control for the SIU
+
 Copyright © 2020 NAME HERE <EMAIL ADDRESS>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,7 +39,7 @@ var listCmd = &cobra.Command{
 		}
 
 		// get the table
-		t, _ := getTableFromList(list)
+		t := getTableFromList(list)
 		t.Render()
 		fmt.Printf("\n")
 
@@ -50,7 +51,7 @@ func init() {
 	rootCmd.AddCommand(listCmd)
 }
 
-func getTableFromList(list []models.Motion) (table.Writer, error) {
+func getTableFromList(list []models.Motion) table.Writer {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
 	fmt.Printf("\n")
@@ -68,5 +69,6 @@ func getTableFromList(list []models.Motion) (table.Writer, error) {
 
 	// total
 	t.AppendFooter(table.Row{"", "", "", "Total", total, ""})
-	return t, nil
+
+	return t
 }

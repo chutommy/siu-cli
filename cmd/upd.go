@@ -18,6 +18,7 @@ package cmd
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -26,6 +27,12 @@ import (
 	"github.com/chutified/siu/models"
 	"github.com/jedib0t/go-pretty/table"
 	"github.com/spf13/cobra"
+)
+
+var (
+	errInvalidMotion     = errors.New("motion is not available")
+	errInvalidIdentifier = errors.New("identifier can not be recognized")
+	errMotionNotFound    = errors.New("motion can not be found")
 )
 
 // updCmd represents the upd command.
@@ -43,8 +50,8 @@ var updCmd = &cobra.Command{
 			return err
 		}
 
-		if collision, bad := db.CheckCollision(m, old); bad {
-			return fmt.Errorf("invalid motion. Reusing values: %v", collision)
+		if _, bad := db.CheckCollision(m, old); bad {
+			return errInvalidMotion
 		}
 
 		printUpdated(m)
@@ -76,14 +83,14 @@ func getOldMotionToUpd() (models.Motion, error) {
 	}
 
 	if len(strings.Split(search, " ")) != 1 || search == "\n" {
-		return models.Motion{}, fmt.Errorf("invalid identificator: %s", search)
+		return models.Motion{}, errInvalidIdentifier
 	}
 
 	search = strings.TrimSuffix(search, "\n")
 
 	m, err := db.ReadOne(search)
 	if err != nil {
-		return models.Motion{}, fmt.Errorf("could not find motion: %s", search)
+		return models.Motion{}, errMotionNotFound
 	}
 
 	return m, nil
@@ -107,7 +114,7 @@ func getNewMotionToUpd(old models.Motion) (models.Motion, error) {
 	}
 
 	if len(strings.Split(name, " ")) != 1 {
-		return models.Motion{}, fmt.Errorf("invalid name: %s", name)
+		return models.Motion{}, errInvalidName
 	}
 
 	// get url
@@ -123,7 +130,7 @@ func getNewMotionToUpd(old models.Motion) (models.Motion, error) {
 	}
 
 	if len(strings.Split(url, " ")) != 1 {
-		return models.Motion{}, fmt.Errorf("invalid url: %s", url)
+		return models.Motion{}, errInvalidURL
 	}
 
 	// get shortcut
@@ -137,8 +144,9 @@ func getNewMotionToUpd(old models.Motion) (models.Motion, error) {
 	if shortcut == "\n" {
 		shortcut = old.Shortcut
 	}
+
 	if len(strings.Split(shortcut, " ")) != 1 {
-		return models.Motion{}, fmt.Errorf("invalid shortcut: %s", shortcut)
+		return models.Motion{}, errInvalidShortcut
 	}
 
 	return models.Motion{

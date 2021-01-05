@@ -23,6 +23,7 @@ import (
 func main() {
 	// to be able to read and write documents
 	db.Connect()
+
 	defer func() {
 		if err := db.Disconnect(); err != nil {
 			panic(err)
