@@ -18,6 +18,7 @@ package cmd
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -28,7 +29,7 @@ import (
 	"github.com/chutified/siu/models"
 	"github.com/spf13/cobra"
 
-	homedir "github.com/mitchellh/go-homedir"
+	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
 
@@ -134,7 +135,7 @@ func getMotionsToRun() ([]models.Motion, error) {
 	return motions, nil
 }
 
-// runMotions takes the motions and handles them..
+// runMotions takes the motions and handles them.
 func runMotions(motions []models.Motion) error {
 	for _, m := range motions {
 		fmt.Printf("Openning %v ...\n", m.URL)
@@ -144,7 +145,7 @@ func runMotions(motions []models.Motion) error {
 		}
 
 		if err := db.IncMotionUsage(m); err != nil {
-			return err
+			return fmt.Errorf("internal application error, failed to increment usage: %w", err)
 		}
 	}
 
@@ -168,6 +169,7 @@ func openBrowser(url string) error {
 	default:
 		err = errors.New("unsupported platform")
 	}
+
 	if err != nil {
 		return err
 	}

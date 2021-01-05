@@ -24,7 +24,7 @@ import (
 
 	"github.com/chutified/siu/db"
 	"github.com/chutified/siu/models"
-	table "github.com/jedib0t/go-pretty/table"
+	"github.com/jedib0t/go-pretty/table"
 	"github.com/spf13/cobra"
 )
 
@@ -44,13 +44,13 @@ var updCmd = &cobra.Command{
 		}
 
 		if collision, bad := db.CheckCollision(m, old); bad {
-			return fmt.Errorf("invalid motion. Reusing values: %w", collision)
+			return fmt.Errorf("invalid motion. Reusing values: %v", collision)
 		}
 
 		printUpdated(m)
 
 		if err := db.Update(old.ID, m); err != nil {
-			return err
+			return fmt.Errorf("failed to update a motion: %w", err)
 		}
 
 		return nil
@@ -74,24 +74,29 @@ func getOldMotionToUpd() (models.Motion, error) {
 	if err != nil {
 		return models.Motion{}, fmt.Errorf("could not get motion's identificator: %w", err)
 	}
+
 	if len(strings.Split(search, " ")) != 1 || search == "\n" {
-		return models.Motion{}, fmt.Errorf("invalid identificator: %w", search)
+		return models.Motion{}, fmt.Errorf("invalid identificator: %s", search)
 	}
+
 	search = strings.TrimSuffix(search, "\n")
 
 	m, err := db.ReadOne(search)
 	if err != nil {
-		return models.Motion{}, fmt.Errorf("could not find motion: %w", search)
+		return models.Motion{}, fmt.Errorf("could not find motion: %s", search)
 	}
+
 	return m, nil
 }
 
 func getNewMotionToUpd(old models.Motion) (models.Motion, error) {
 	reader := bufio.NewReader(os.Stdin)
+
 	fmt.Printf("\n")
 
 	// get name
 	fmt.Printf("Name [%v]: ", old.Name)
+
 	name, err := reader.ReadString('\n')
 	if err != nil {
 		return models.Motion{}, fmt.Errorf("could not get motion's name: %w", err)
@@ -100,12 +105,14 @@ func getNewMotionToUpd(old models.Motion) (models.Motion, error) {
 	if name == "\n" {
 		name = old.Name
 	}
+
 	if len(strings.Split(name, " ")) != 1 {
-		return models.Motion{}, fmt.Errorf("invalid name: %w", name)
+		return models.Motion{}, fmt.Errorf("invalid name: %s", name)
 	}
 
 	// get url
 	fmt.Printf("URL [%v]: ", old.URL)
+
 	url, err := reader.ReadString('\n')
 	if err != nil {
 		return models.Motion{}, fmt.Errorf("could not get motion's name: %w", err)
@@ -114,12 +121,14 @@ func getNewMotionToUpd(old models.Motion) (models.Motion, error) {
 	if url == "\n" {
 		url = old.URL
 	}
+
 	if len(strings.Split(url, " ")) != 1 {
-		return models.Motion{}, fmt.Errorf("invalid url: %w", url)
+		return models.Motion{}, fmt.Errorf("invalid url: %s", url)
 	}
 
 	// get shortcut
 	fmt.Printf("Shortcut [%v]: ", old.Shortcut)
+
 	shortcut, err := reader.ReadString('\n')
 	if err != nil {
 		return models.Motion{}, fmt.Errorf("could not get motion's name: %w", err)
@@ -129,7 +138,7 @@ func getNewMotionToUpd(old models.Motion) (models.Motion, error) {
 		shortcut = old.Shortcut
 	}
 	if len(strings.Split(shortcut, " ")) != 1 {
-		return models.Motion{}, fmt.Errorf("invalid shortcut: %w", shortcut)
+		return models.Motion{}, fmt.Errorf("invalid shortcut: %s", shortcut)
 	}
 
 	return models.Motion{

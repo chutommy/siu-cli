@@ -24,7 +24,7 @@ import (
 
 	"github.com/chutified/siu/db"
 	"github.com/chutified/siu/models"
-	table "github.com/jedib0t/go-pretty/table"
+	"github.com/jedib0t/go-pretty/table"
 	"github.com/spf13/cobra"
 )
 
@@ -39,15 +39,15 @@ func init() {
 	setCmd.AddCommand(delCmd)
 }
 
-func del(cmd *cobra.Command, args []string) error {
+func del(*cobra.Command, []string) error {
 	// get motion to get id
 	m, err := getMotionToDel()
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to load motion: %w", err)
 	}
 
 	if err := db.Delete(m.ID); err != nil {
-		return err
+		return fmt.Errorf("unable to delete a motion: %w", err)
 	}
 
 	printDeleted(m)

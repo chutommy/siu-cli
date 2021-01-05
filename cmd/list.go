@@ -22,7 +22,7 @@ import (
 
 	"github.com/chutified/siu/db"
 	"github.com/chutified/siu/models"
-	table "github.com/jedib0t/go-pretty/table"
+	"github.com/jedib0t/go-pretty/table"
 	"github.com/spf13/cobra"
 )
 
@@ -34,7 +34,7 @@ var listCmd = &cobra.Command{
 		// get all records
 		list, err := db.ReadAll()
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to read all motions: %w", err)
 		}
 
 		// get the table

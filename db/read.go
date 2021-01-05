@@ -19,7 +19,10 @@ func ReadOne(search string) (models.Motion, error) {
 	if err != nil {
 		return models.Motion{}, fmt.Errorf("could not read from the collection: %w", err)
 	}
-	defer cursor.Close(ctx)
+
+	defer func() {
+		err = cursor.Close(ctx)
+	}()
 
 	for cursor.Next(ctx) {
 		var m bson.M
@@ -48,7 +51,7 @@ func ReadOne(search string) (models.Motion, error) {
 }
 
 // ReadAll return all motions in the collection.
-func ReadAll() ([]models.Motion, error) {
+func ReadAll() (m []models.Motion, err error) {
 	// sort desc by usage
 	opts := options.Find().SetSort(bson.D{{Key: "usage", Value: -1}})
 
@@ -56,7 +59,10 @@ func ReadAll() ([]models.Motion, error) {
 	if err != nil {
 		return []models.Motion{}, fmt.Errorf("could not read from the collection: %w", err)
 	}
-	defer cursor.Close(ctx)
+
+	defer func() {
+		err = cursor.Close(ctx)
+	}()
 
 	// create a var to store
 	var motions []models.Motion

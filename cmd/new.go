@@ -25,7 +25,7 @@ import (
 	"github.com/chutified/siu/db"
 	"github.com/chutified/siu/models"
 	"github.com/google/uuid"
-	table "github.com/jedib0t/go-pretty/table"
+	"github.com/jedib0t/go-pretty/table"
 	"github.com/spf13/cobra"
 )
 
@@ -40,18 +40,18 @@ func init() {
 	setCmd.AddCommand(newCmd)
 }
 
-func new(cmd *cobra.Command, args []string) error {
+func new(*cobra.Command, []string) error {
 	m, err := getNewMotionToCreate()
 	if err != nil {
 		return err
 	}
 
 	if collision, bad := db.CheckCollision(m, models.Motion{}); bad {
-		return fmt.Errorf("invalid motion. Reusing values: %w", collision)
+		return fmt.Errorf("invalid motion, reusing values: %v", collision)
 	}
 
 	if err := db.Create(m); err != nil {
-		return err
+		return fmt.Errorf("failed to create a new motion: %w", err)
 	}
 
 	printCreated(m)
@@ -73,7 +73,7 @@ func getNewMotionToCreate() (models.Motion, error) {
 	}
 
 	if len(strings.Split(name, " ")) != 1 || name == "\n" {
-		return models.Motion{}, fmt.Errorf("invalid name: %w", name)
+		return models.Motion{}, fmt.Errorf("invalid name: %s", name)
 	}
 
 	// get url
@@ -85,7 +85,7 @@ func getNewMotionToCreate() (models.Motion, error) {
 	}
 
 	if len(strings.Split(url, " ")) != 1 || url == "\n" {
-		return models.Motion{}, fmt.Errorf("invalid url: %w", url)
+		return models.Motion{}, fmt.Errorf("invalid url: %s", url)
 	}
 
 	// get shortcut
@@ -97,7 +97,7 @@ func getNewMotionToCreate() (models.Motion, error) {
 	}
 
 	if len(strings.Split(shortcut, " ")) != 1 || shortcut == "\n" {
-		return models.Motion{}, fmt.Errorf("invalid shortcut: %w", shortcut)
+		return models.Motion{}, fmt.Errorf("invalid shortcut: %s", shortcut)
 	}
 
 	return models.Motion{
