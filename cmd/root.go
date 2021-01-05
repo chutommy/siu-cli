@@ -27,17 +27,14 @@ import (
 
 	"github.com/chutified/siu/db"
 	"github.com/chutified/siu/models"
-	"github.com/spf13/cobra"
-
 	"github.com/mitchellh/go-homedir"
+	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 var cfgFile string
 
-var (
-	errUnsupportedPlatform = errors.New("platform is not supported")
-)
+var errUnsupportedPlatform = errors.New("platform is not supported")
 
 // rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{

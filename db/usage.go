@@ -16,7 +16,8 @@ func IncMotionUsage(m models.Motion) error {
 	update := bson.D{{
 		Key: "$inc", Value: bson.M{
 			"usage": 1,
-		}}}
+		},
+	}}
 
 	if _, err := motionsCollection.UpdateOne(ctx, filter, update); err != nil {
 		return fmt.Errorf("could not update: %w", err)

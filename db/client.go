@@ -10,11 +10,12 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var mongoURL = "mongodb+srv://ferda:ferdajekamarad@cluster0-9rknb.mongodb.net/test?retryWrites=true&w=majority"
-var client *mongo.Client
-
-var ctx context.Context
-var motionsCollection *mongo.Collection
+var (
+	mongoURL          = "mongodb+srv://ferda:ferdajekamarad@cluster0-9rknb.mongodb.net/test?retryWrites=true&w=majority"
+	client            *mongo.Client
+	ctx               context.Context
+	motionsCollection *mongo.Collection
+)
 
 // Connect connects to the remote DB.
 func Connect() {
