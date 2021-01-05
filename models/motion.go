@@ -1,6 +1,6 @@
 package models
 
-// Motion is a basic model of an item for SIU
+// Motion is a basic model of an item for SIU.
 type Motion struct {
 	ID       string
 	Name     string
