@@ -29,6 +29,3 @@ var setCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(setCmd)
 }
-
-// this sub-command has not command
-// needs a new, upd or del

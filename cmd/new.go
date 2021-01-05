@@ -34,7 +34,7 @@ import (
 var newCmd = &cobra.Command{
 	Use:   "new",
 	Short: "Creates a new motion",
-	RunE:  new,
+	RunE:  newMotion,
 }
 
 var (
@@ -52,7 +52,7 @@ func init() {
 	setCmd.AddCommand(newCmd)
 }
 
-func new(*cobra.Command, []string) error {
+func newMotion(*cobra.Command, []string) error {
 	m, err := getNewMotionToCreate()
 	if err != nil {
 		return err
@@ -63,7 +63,7 @@ func new(*cobra.Command, []string) error {
 	}
 
 	if err := db.Create(m); err != nil {
-		return fmt.Errorf("failed to create a new motion: %w", err)
+		return fmt.Errorf("failed to create a newMotion motion: %w", err)
 	}
 
 	printCreated(m)
