@@ -10,21 +10,21 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// ReadOne finds the motion by any string and returns it
+// ReadOne finds the motion by any string and returns it.
 func ReadOne(search string) (models.Motion, error) {
 	// sort desc by the usage
 	opts := options.Find().SetSort(bson.D{{Key: "usage", Value: -1}})
 
 	cursor, err := motionsCollection.Find(ctx, bson.D{}, opts)
 	if err != nil {
-		return models.Motion{}, fmt.Errorf("Could not read from the collection: %v", err)
+		return models.Motion{}, fmt.Errorf("could not read from the collection: %w", err)
 	}
 	defer cursor.Close(ctx)
 
 	for cursor.Next(ctx) {
 		var m bson.M
 		if err = cursor.Decode(&m); err != nil {
-			return models.Motion{}, fmt.Errorf("Could not read an item from the collection: %v", err)
+			return models.Motion{}, fmt.Errorf("could not read an item from the collection: %w", err)
 		}
 
 		idM := m["id"].(string)
@@ -47,23 +47,24 @@ func ReadOne(search string) (models.Motion, error) {
 	return models.Motion{}, mongo.ErrNoDocuments
 }
 
-// ReadAll return all motions in the collection
+// ReadAll return all motions in the collection.
 func ReadAll() ([]models.Motion, error) {
 	// sort desc by usage
 	opts := options.Find().SetSort(bson.D{{Key: "usage", Value: -1}})
 
 	cursor, err := motionsCollection.Find(ctx, bson.D{}, opts)
 	if err != nil {
-		return []models.Motion{}, fmt.Errorf("Could not read from the collection: %v", err)
+		return []models.Motion{}, fmt.Errorf("could not read from the collection: %w", err)
 	}
 	defer cursor.Close(ctx)
 
-	// create var to store
+	// create a var to store
 	var motions []models.Motion
+
 	for cursor.Next(ctx) {
 		var m bson.M
 		if err = cursor.Decode(&m); err != nil {
-			return []models.Motion{}, fmt.Errorf("Could not read an item from the collection: %v", err)
+			return []models.Motion{}, fmt.Errorf("could not read an item from the collection: %w", err)
 		}
 
 		// get each motion

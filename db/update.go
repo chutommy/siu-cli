@@ -9,7 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// Update replace the motion with certain Name with a new motion
+// Update replace the motion with certain Name with a new motion.
 func Update(id string, newMotion models.Motion) error {
 	opts := options.Update().SetUpsert(true)
 	// if names equal
@@ -25,7 +25,8 @@ func Update(id string, newMotion models.Motion) error {
 	}}}
 
 	if _, err := motionsCollection.UpdateOne(ctx, filter, update, opts); err != nil {
-		return fmt.Errorf("Failed to update the motion: %v", err)
+		return fmt.Errorf("failed to update the motion: %w", err)
 	}
+
 	return nil
 }

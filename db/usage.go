@@ -7,7 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-// IncMotionUsage increments usage of the motion
+// IncMotionUsage increments usage of the motion.
 func IncMotionUsage(m models.Motion) error {
 	// if names equal
 	filter := bson.D{{Key: "id", Value: m.ID}}
@@ -19,7 +19,8 @@ func IncMotionUsage(m models.Motion) error {
 		}}}
 
 	if _, err := motionsCollection.UpdateOne(ctx, filter, update); err != nil {
-		return fmt.Errorf("Could not update: %v", err)
+		return fmt.Errorf("could not update: %w", err)
 	}
+
 	return nil
 }

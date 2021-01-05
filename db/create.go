@@ -8,8 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-// Create creates a new motion and
-// returns an error if any is occured
+// Create creates a new motion and returns an error if any is occurred.
 func Create(m models.Motion) error {
 	// new motion
 	motionBSON := bson.D{
@@ -21,7 +20,8 @@ func Create(m models.Motion) error {
 	}
 
 	if _, err := motionsCollection.InsertOne(ctx, motionBSON); err != nil {
-		return fmt.Errorf("Could not insert new item \n\n\t%v\n\t into database collection: %v", m, err)
+		return fmt.Errorf("could not insert new item \n\n\t%v\n\t into database collection: %w", m, err)
 	}
+
 	return nil
 }
