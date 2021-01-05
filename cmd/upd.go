@@ -28,7 +28,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// updCmd represents the upd command
+// updCmd represents the upd command.
 var updCmd = &cobra.Command{
 	Use:   "upd",
 	Short: "Updates the motion",
@@ -43,13 +43,16 @@ var updCmd = &cobra.Command{
 			return err
 		}
 
-		if colision, bad := db.CheckCollision(m, old); bad {
-			return fmt.Errorf("Invalid motion. Reusing values: %v", colision)
+		if collision, bad := db.CheckCollision(m, old); bad {
+			return fmt.Errorf("invalid motion. Reusing values: %w", collision)
 		}
 
 		printUpdated(m)
 
-		db.Update(old.ID, m)
+		if err := db.Update(old.ID, m); err != nil {
+			return err
+		}
+
 		return nil
 	},
 }
@@ -58,25 +61,27 @@ func init() {
 	setCmd.AddCommand(updCmd)
 }
 
-// getOldMotionToUpd updates the motion
+// getOldMotionToUpd updates the motion.
 func getOldMotionToUpd() (models.Motion, error) {
 	reader := bufio.NewReader(os.Stdin)
+
 	fmt.Printf("\n")
 
 	// get search
 	fmt.Print("Updating [ID/Name/URL/Shortcut]: ")
+
 	search, err := reader.ReadString('\n')
 	if err != nil {
-		return models.Motion{}, fmt.Errorf("Could not get motion's identificator: %v", err)
+		return models.Motion{}, fmt.Errorf("could not get motion's identificator: %w", err)
 	}
 	if len(strings.Split(search, " ")) != 1 || search == "\n" {
-		return models.Motion{}, fmt.Errorf("Invalid identificator: %v", search)
+		return models.Motion{}, fmt.Errorf("invalid identificator: %w", search)
 	}
 	search = strings.TrimSuffix(search, "\n")
 
 	m, err := db.ReadOne(search)
 	if err != nil {
-		return models.Motion{}, fmt.Errorf("Could not find motion: %v", search)
+		return models.Motion{}, fmt.Errorf("could not find motion: %w", search)
 	}
 	return m, nil
 }
@@ -89,42 +94,42 @@ func getNewMotionToUpd(old models.Motion) (models.Motion, error) {
 	fmt.Printf("Name [%v]: ", old.Name)
 	name, err := reader.ReadString('\n')
 	if err != nil {
-		return models.Motion{}, fmt.Errorf("Could not get motion's name: %v", err)
+		return models.Motion{}, fmt.Errorf("could not get motion's name: %w", err)
 	}
 	// if empty use the previous
 	if name == "\n" {
 		name = old.Name
 	}
 	if len(strings.Split(name, " ")) != 1 {
-		return models.Motion{}, fmt.Errorf("Invalid name: %v", name)
+		return models.Motion{}, fmt.Errorf("invalid name: %w", name)
 	}
 
 	// get url
 	fmt.Printf("URL [%v]: ", old.URL)
 	url, err := reader.ReadString('\n')
 	if err != nil {
-		return models.Motion{}, fmt.Errorf("Could not get motion's name: %v", err)
+		return models.Motion{}, fmt.Errorf("could not get motion's name: %w", err)
 	}
 	// if empty use the previous
 	if url == "\n" {
 		url = old.URL
 	}
 	if len(strings.Split(url, " ")) != 1 {
-		return models.Motion{}, fmt.Errorf("Invalid url: %v", url)
+		return models.Motion{}, fmt.Errorf("invalid url: %w", url)
 	}
 
 	// get shortcut
 	fmt.Printf("Shortcut [%v]: ", old.Shortcut)
 	shortcut, err := reader.ReadString('\n')
 	if err != nil {
-		return models.Motion{}, fmt.Errorf("Could not get motion's name: %v", err)
+		return models.Motion{}, fmt.Errorf("could not get motion's name: %w", err)
 	}
 	// if empty use the previous
 	if shortcut == "\n" {
 		shortcut = old.Shortcut
 	}
 	if len(strings.Split(shortcut, " ")) != 1 {
-		return models.Motion{}, fmt.Errorf("Invalid shortcut: %v", shortcut)
+		return models.Motion{}, fmt.Errorf("invalid shortcut: %w", shortcut)
 	}
 
 	return models.Motion{

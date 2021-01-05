@@ -28,7 +28,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// delCmd represents the del command
+// delCmd represents the del command.
 var delCmd = &cobra.Command{
 	Use:   "del",
 	Short: "Deletes one or multiple motions",
@@ -57,20 +57,22 @@ func del(cmd *cobra.Command, args []string) error {
 
 func getMotionToDel() (models.Motion, error) {
 	reader := bufio.NewReader(os.Stdin)
+
 	fmt.Printf("\n")
 
 	// get, check, trim
 	fmt.Print("Deleting [ID/Name/URL/Shortcut]: ")
+
 	search, err := reader.ReadString('\n')
 	if err != nil {
-		return models.Motion{}, fmt.Errorf("Could not read identificator: %v", err)
+		return models.Motion{}, fmt.Errorf("could not read identificator: %w", err)
 	}
+
 	search = strings.TrimSuffix(search, "\n")
 
 	return db.ReadOne(search)
 }
 
-// logging
 func printDeleted(m models.Motion) {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)

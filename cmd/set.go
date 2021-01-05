@@ -20,7 +20,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// setCmd represents the set command
+// setCmd represents the set command.
 var setCmd = &cobra.Command{
 	Use:   "set",
 	Short: "Manipulates with the list of motions",

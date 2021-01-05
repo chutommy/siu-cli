@@ -34,7 +34,7 @@ import (
 
 var cfgFile string
 
-// rootCmd represents the base command when called without any subcommands
+// rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{
 	Use:   "siu",
 	Short: "Siu is a very fast and minimalist urls opener",
@@ -47,6 +47,7 @@ var rootCmd = &cobra.Command{
 		if err := runMotions(motions); err != nil {
 			return err
 		}
+
 		return nil
 	},
 }
@@ -81,7 +82,7 @@ func initConfig() {
 			os.Exit(1)
 		}
 
-		// Search config in home directory with name ".siu" (without extension).
+		// Search config in home directory with a name ".siu" (without extension).
 		viper.AddConfigPath(home)
 		viper.SetConfigName(".siu")
 	}
@@ -94,33 +95,36 @@ func initConfig() {
 	}
 }
 
-// getMotionsToRun reads the user's input
-// and does the magic :)
+// getMotionsToRun reads the user's input.
 func getMotionsToRun() ([]models.Motion, error) {
 	reader := bufio.NewReader(os.Stdin)
 
 	// get input and trim it
 	fmt.Printf("RUN: ")
+
 	items, err := reader.ReadString('\n')
 	if err != nil {
-		return []models.Motion{}, fmt.Errorf("Could not read what to run: %v", err)
+		return []models.Motion{}, fmt.Errorf("could not read what to run: %w", err)
 	}
+
 	items = strings.TrimSpace(strings.TrimSuffix(items, "\n"))
+
 	fmt.Printf("\n")
 
 	// search for each motion
 	searches := strings.Split(items, " ")
 	var motions []models.Motion
 	for _, search := range searches {
-
 		// skip if extra spaces
 		if search == "" {
 			continue
 		}
+
 		m, err := db.ReadOne(search)
 		if err != nil {
-			// if not found log and skip
+			// if not found a log and skip
 			fmt.Printf("Motion %v not found...\n", search)
+
 			continue
 		}
 
@@ -130,21 +134,27 @@ func getMotionsToRun() ([]models.Motion, error) {
 	return motions, nil
 }
 
-// runMotions takes the motions and handles them
+// runMotions takes the motions and handles them..
 func runMotions(motions []models.Motion) error {
 	for _, m := range motions {
 		fmt.Printf("Openning %v ...\n", m.URL)
+
 		if err := openBrowser(m.URL); err != nil {
 			fmt.Printf("Could not open: %v ...\n", m.URL)
 		}
-		db.IncMotionUsage(m)
+
+		if err := db.IncMotionUsage(m); err != nil {
+			return err
+		}
 	}
+
 	fmt.Printf("\n")
+
 	return nil
 }
 
 // openBrowser opens the url in a new browser
-// If a browser window exists it opens the url in a new tab
+// If a browser window exists it opens the url in a new tab.
 func openBrowser(url string) error {
 	var err error
 
@@ -156,7 +166,7 @@ func openBrowser(url string) error {
 	case "darwin":
 		err = exec.Command("open", url).Start()
 	default:
-		err = fmt.Errorf("unsupported platform")
+		err = errors.New("unsupported platform")
 	}
 	if err != nil {
 		return err

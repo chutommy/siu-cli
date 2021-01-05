@@ -26,7 +26,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// listCmd represents the list command
+// listCmd represents the list command.
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "Shows all available motions",
@@ -41,6 +41,7 @@ var listCmd = &cobra.Command{
 		t, _ := getTableFromList(list)
 		t.Render()
 		fmt.Printf("\n")
+
 		return nil
 	},
 }
@@ -59,6 +60,7 @@ func getTableFromList(list []models.Motion) (table.Writer, error) {
 
 	// records and count total
 	var total int32
+
 	for index, m := range list {
 		t.AppendRow(table.Row{index, m.Name, m.URL, m.Shortcut, m.Usage, m.ID})
 		total += m.Usage

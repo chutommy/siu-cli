@@ -29,7 +29,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// newCmd represents the new command
+// newCmd represents the new command.
 var newCmd = &cobra.Command{
 	Use:   "new",
 	Short: "Creates a new motion",
@@ -46,8 +46,8 @@ func new(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	if colision, bad := db.CheckCollision(m, models.Motion{}); bad {
-		return fmt.Errorf("Invalid motion. Reusing values: %v", colision)
+	if collision, bad := db.CheckCollision(m, models.Motion{}); bad {
+		return fmt.Errorf("invalid motion. Reusing values: %w", collision)
 	}
 
 	if err := db.Create(m); err != nil {
@@ -61,36 +61,43 @@ func new(cmd *cobra.Command, args []string) error {
 
 func getNewMotionToCreate() (models.Motion, error) {
 	reader := bufio.NewReader(os.Stdin)
+
 	fmt.Printf("\n")
 
 	// get name
 	fmt.Print("Name: ")
+
 	name, err := reader.ReadString('\n')
 	if err != nil {
-		return models.Motion{}, fmt.Errorf("Could not get motion's name: %v", err)
+		return models.Motion{}, fmt.Errorf("could not get motion's name: %w", err)
 	}
+
 	if len(strings.Split(name, " ")) != 1 || name == "\n" {
-		return models.Motion{}, fmt.Errorf("Invalid name: %v", name)
+		return models.Motion{}, fmt.Errorf("invalid name: %w", name)
 	}
 
 	// get url
 	fmt.Print("URL: ")
+
 	url, err := reader.ReadString('\n')
 	if err != nil {
-		return models.Motion{}, fmt.Errorf("Could not get motion's name: %v", err)
+		return models.Motion{}, fmt.Errorf("could not get motion's name: %w", err)
 	}
+
 	if len(strings.Split(url, " ")) != 1 || url == "\n" {
-		return models.Motion{}, fmt.Errorf("Invalid url: %v", url)
+		return models.Motion{}, fmt.Errorf("invalid url: %w", url)
 	}
 
 	// get shortcut
 	fmt.Print("Shortcut: ")
+
 	shortcut, err := reader.ReadString('\n')
 	if err != nil {
-		return models.Motion{}, fmt.Errorf("Could not get motion's name: %v", err)
+		return models.Motion{}, fmt.Errorf("could not get motion's name: %w", err)
 	}
+
 	if len(strings.Split(shortcut, " ")) != 1 || shortcut == "\n" {
-		return models.Motion{}, fmt.Errorf("Invalid shortcut: %v", shortcut)
+		return models.Motion{}, fmt.Errorf("invalid shortcut: %w", shortcut)
 	}
 
 	return models.Motion{
