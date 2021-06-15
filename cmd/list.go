@@ -41,7 +41,6 @@ var listCmd = &cobra.Command{
 		// get the table
 		t := getTableFromList(list)
 		t.Render()
-		fmt.Printf("\n")
 
 		return nil
 	},
@@ -54,7 +53,6 @@ func init() {
 func getTableFromList(list []models.Motion) table.Writer {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
-	fmt.Printf("\n")
 
 	// header
 	t.AppendHeader(table.Row{"#", "NAME", "URL", "SHORTCUT", "USAGE", "ID"})

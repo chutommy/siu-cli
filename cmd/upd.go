@@ -20,6 +20,7 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"strings"
 
@@ -72,10 +73,10 @@ func init() {
 func getOldMotionToUpd() (models.Motion, error) {
 	reader := bufio.NewReader(os.Stdin)
 
-	fmt.Printf("\n")
+	log.Printf("\n")
 
 	// get search
-	fmt.Print("Updating [ID/Name/URL/Shortcut]: ")
+	log.Print("Updating [ID/Name/URL/Shortcut]: ")
 
 	search, err := reader.ReadString('\n')
 	if err != nil {
@@ -99,10 +100,10 @@ func getOldMotionToUpd() (models.Motion, error) {
 func getNewMotionToUpd(old models.Motion) (models.Motion, error) {
 	reader := bufio.NewReader(os.Stdin)
 
-	fmt.Printf("\n")
+	log.Printf("\n")
 
 	// get name
-	fmt.Printf("Name [%v]: ", old.Name)
+	log.Printf("Name [%v]: ", old.Name)
 
 	name, err := reader.ReadString('\n')
 	if err != nil {
@@ -118,7 +119,7 @@ func getNewMotionToUpd(old models.Motion) (models.Motion, error) {
 	}
 
 	// get url
-	fmt.Printf("URL [%v]: ", old.URL)
+	log.Printf("URL [%v]: ", old.URL)
 
 	url, err := reader.ReadString('\n')
 	if err != nil {
@@ -134,7 +135,7 @@ func getNewMotionToUpd(old models.Motion) (models.Motion, error) {
 	}
 
 	// get shortcut
-	fmt.Printf("Shortcut [%v]: ", old.Shortcut)
+	log.Printf("Shortcut [%v]: ", old.Shortcut)
 
 	shortcut, err := reader.ReadString('\n')
 	if err != nil {
@@ -162,10 +163,10 @@ func printUpdated(m models.Motion) {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
 
-	fmt.Printf("\nMotion updated:\n")
+	log.Printf("\nMotion updated:\n")
 	t.AppendHeader(table.Row{"NAME", "URL", "SHORTCUT", "USAGE", "ID"})
 	t.AppendRow(table.Row{m.Name, m.URL, m.Shortcut, m.Usage, m.ID})
 
 	t.Render()
-	fmt.Printf("\n")
+	log.Printf("\n")
 }

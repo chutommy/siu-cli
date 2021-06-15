@@ -2,6 +2,7 @@
 package db
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/chutified/siu/models"
@@ -9,6 +10,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
+var ErrInvalidValueType = errors.New("internal error, invalid value type")
 
 // ReadOne finds the motion by any string and returns it.
 func ReadOne(search string) (models.Motion, error) {
@@ -30,10 +33,29 @@ func ReadOne(search string) (models.Motion, error) {
 			return models.Motion{}, fmt.Errorf("could not read an item from the collection: %w", err)
 		}
 
-		idM := m["id"].(string)
-		nameM := m["name"].(string)
-		urlM := m["url"].(string)
-		shortcutM := m["shortcut"].(string)
+		var idM, nameM, urlM, shortcutM string
+
+		var ok bool
+
+		idM, ok = m["id"].(string)
+		if !ok {
+			return models.Motion{}, ErrInvalidValueType
+		}
+
+		nameM, ok = m["name"].(string)
+		if !ok {
+			return models.Motion{}, ErrInvalidValueType
+		}
+
+		urlM, ok = m["url"].(string)
+		if !ok {
+			return models.Motion{}, ErrInvalidValueType
+		}
+
+		shortcutM, ok = m["shortcut"].(string)
+		if !ok {
+			return models.Motion{}, ErrInvalidValueType
+		}
 
 		// checks each field
 		if idM == search || nameM == search || urlM == search || shortcutM == search {

@@ -33,5 +33,9 @@ func Connect() {
 
 // Disconnect disconnects from the remote DB.
 func Disconnect() error {
-	return client.Disconnect(ctx)
+	if err := client.Disconnect(ctx); err != nil {
+		return fmt.Errorf("disconnect error: %w", err)
+	}
+
+	return nil
 }

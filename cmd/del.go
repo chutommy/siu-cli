@@ -19,6 +19,7 @@ package cmd
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
 	"strings"
 
@@ -58,10 +59,7 @@ func del(*cobra.Command, []string) error {
 func getMotionToDel() (models.Motion, error) {
 	reader := bufio.NewReader(os.Stdin)
 
-	fmt.Printf("\n")
-
-	// get, check, trim
-	fmt.Print("Deleting [ID/Name/URL/Shortcut]: ")
+	log.Printf("\nDeleting [ID/Name/URL/Shortcut]: ")
 
 	search, err := reader.ReadString('\n')
 	if err != nil {
@@ -70,17 +68,22 @@ func getMotionToDel() (models.Motion, error) {
 
 	search = strings.TrimSuffix(search, "\n")
 
-	return db.ReadOne(search)
+	m, err := db.ReadOne(search)
+	if err != nil {
+		return models.Motion{}, fmt.Errorf("can't read motion: %w", err)
+	}
+
+	return m, nil
 }
 
 func printDeleted(m models.Motion) {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
 
-	fmt.Printf("\nMotion deleted:\n")
+	log.Printf("\nMotion to delete:\n")
+
 	t.AppendHeader(table.Row{"NAME", "URL", "SHORTCUT", "USAGE", "ID"})
 	t.AppendRow(table.Row{m.Name, m.URL, m.Shortcut, m.Usage, m.ID})
 
 	t.Render()
-	fmt.Printf("\n")
 }

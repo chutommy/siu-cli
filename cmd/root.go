@@ -20,6 +20,7 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"runtime"
@@ -46,11 +47,7 @@ var rootCmd = &cobra.Command{
 			return err
 		}
 
-		if err := runMotions(motions); err != nil {
-			return err
-		}
-
-		return nil
+		return runMotions(motions)
 	},
 }
 
@@ -58,8 +55,7 @@ var rootCmd = &cobra.Command{
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 }
 
@@ -80,7 +76,7 @@ func initConfig() {
 		// Find home directory.
 		home, err := homedir.Dir()
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 			os.Exit(1)
 		}
 
@@ -93,7 +89,7 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+		log.Println("Using config file:", viper.ConfigFileUsed())
 	}
 }
 
@@ -102,7 +98,7 @@ func getMotionsToRun() ([]models.Motion, error) {
 	reader := bufio.NewReader(os.Stdin)
 
 	// get input and trim it
-	fmt.Printf("RUN: ")
+	log.Printf("RUN: ")
 
 	items, err := reader.ReadString('\n')
 	if err != nil {
@@ -111,7 +107,7 @@ func getMotionsToRun() ([]models.Motion, error) {
 
 	items = strings.TrimSpace(strings.TrimSuffix(items, "\n"))
 
-	fmt.Printf("\n")
+	log.Printf("\n")
 
 	// search for each motion
 	searches := strings.Split(items, " ")
@@ -126,7 +122,7 @@ func getMotionsToRun() ([]models.Motion, error) {
 		m, err := db.ReadOne(search)
 		if err != nil {
 			// if not found a log and skip
-			fmt.Printf("Motion %v not found...\n", search)
+			log.Printf("Motion %v not found...\n", search)
 
 			continue
 		}
@@ -140,10 +136,10 @@ func getMotionsToRun() ([]models.Motion, error) {
 // runMotions takes the motions and handles them.
 func runMotions(motions []models.Motion) error {
 	for _, m := range motions {
-		fmt.Printf("Openning %v ...\n", m.URL)
+		log.Printf("Openning %v ...\n", m.URL)
 
 		if err := openBrowser(m.URL); err != nil {
-			fmt.Printf("Could not open: %v ...\n", m.URL)
+			log.Printf("Could not open: %v ...\n", m.URL)
 		}
 
 		if err := db.IncMotionUsage(m); err != nil {
@@ -151,7 +147,7 @@ func runMotions(motions []models.Motion) error {
 		}
 	}
 
-	fmt.Printf("\n")
+	log.Printf("\n")
 
 	return nil
 }

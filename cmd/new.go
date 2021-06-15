@@ -20,6 +20,7 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"strings"
 
@@ -74,10 +75,8 @@ func newMotion(*cobra.Command, []string) error {
 func getNewMotionToCreate() (models.Motion, error) {
 	reader := bufio.NewReader(os.Stdin)
 
-	fmt.Printf("\n")
-
 	// get name
-	fmt.Print("Name: ")
+	log.Printf("\nName: ")
 
 	name, err := reader.ReadString('\n')
 	if err != nil {
@@ -89,7 +88,7 @@ func getNewMotionToCreate() (models.Motion, error) {
 	}
 
 	// get url
-	fmt.Print("URL: ")
+	log.Printf("URL: ")
 
 	url, err := reader.ReadString('\n')
 	if err != nil {
@@ -101,7 +100,7 @@ func getNewMotionToCreate() (models.Motion, error) {
 	}
 
 	// get shortcut
-	fmt.Print("Shortcut: ")
+	log.Printf("Shortcut: ")
 
 	shortcut, err := reader.ReadString('\n')
 	if err != nil {
@@ -125,10 +124,9 @@ func printCreated(m models.Motion) {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
 
-	fmt.Printf("\nNew motion created:\n")
+	log.Printf("\nNew motion created:\n")
 	t.AppendHeader(table.Row{"NAME", "URL", "SHORTCUT", "ID"})
 	t.AppendRow(table.Row{m.Name, m.URL, m.Shortcut, m.ID})
 
 	t.Render()
-	fmt.Printf("\n")
 }
