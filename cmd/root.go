@@ -26,8 +26,8 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/chutified/siu/db"
-	"github.com/chutified/siu/models"
+	"github.com/chutommy/siu/db"
+	"github.com/chutommy/siu/models"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"

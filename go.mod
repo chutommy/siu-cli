@@ -1,4 +1,4 @@
-module github.com/chutified/siu
+module github.com/chutommy/siu-cli
 
 go 1.14
 

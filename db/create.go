@@ -4,7 +4,7 @@ package db
 import (
 	"fmt"
 
-	"github.com/chutified/siu/models"
+	"github.com/chutommy/siu/models"
 	"go.mongodb.org/mongo-driver/bson"
 )
 

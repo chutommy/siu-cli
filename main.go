@@ -16,8 +16,8 @@ limitations under the License.
 package main
 
 import (
-	"github.com/chutified/siu/cmd"
-	"github.com/chutified/siu/db"
+	"github.com/chutommy/siu/cmd"
+	"github.com/chutommy/siu/db"
 )
 
 func main() {

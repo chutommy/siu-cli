@@ -21,8 +21,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/chutified/siu/db"
-	"github.com/chutified/siu/models"
+	"github.com/chutommy/siu/db"
+	"github.com/chutommy/siu/models"
 	"github.com/jedib0t/go-pretty/table"
 	"github.com/spf13/cobra"
 )

@@ -1,6 +1,6 @@
 package db
 
-import "github.com/chutified/siu/models"
+import "github.com/chutommy/siu/models"
 
 // CheckCollision checks the unique of the motion.
 func CheckCollision(m, exception models.Motion) (models.Motion, bool) {

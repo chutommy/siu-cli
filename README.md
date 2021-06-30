@@ -9,7 +9,7 @@ it only creates a new tab.
 Requires Go to be installed (https://golang.org/dl/).
 
 ```bash
-$ go get github.com/chutified/siu-cli
+$ go get github.com/chutommy/siu-cli
 ```
 
 ## Usage
@@ -30,18 +30,18 @@ All __motions__ can be identified by their _name_, _url_, _shortcut_ or _id_.
 
 ### `$ siu -h` command:
 
-![screenshot of siu --help](https://raw.githubusercontent.com/chutified/siu/master/img/00_siu_help.png)
+![screenshot of siu --help](https://raw.githubusercontent.com/chutommy/siu-cli/master/img/00_siu_help.png)
 
 ### `$ siu list` command:
 
-![screenshot of siu list](https://raw.githubusercontent.com/chutified/siu/master/img/01_siu_list.png)
+![screenshot of siu list](https://raw.githubusercontent.com/chutommy/siu-cli/master/img/01_siu_list.png)
 
 ### `$ siu` command (launch the new browser):
 
-![screenshot of siu run](https://raw.githubusercontent.com/chutified/siu/master/img/02_siu_run.png)
-![screenshot of opened tabs](https://raw.githubusercontent.com/chutified/siu/master/img/03_siu_browser.png)
+![screenshot of siu run](https://raw.githubusercontent.com/chutommy/siu-cli/master/img/02_siu_run.png)
+![screenshot of opened tabs](https://raw.githubusercontent.com/chutommy/siu-cli/master/img/03_siu_browser.png)
 
 ### `$ siu` command (if the browser exists, opens in a new tab):
 
-![screenshot of siu run](https://raw.githubusercontent.com/chutified/siu/master/img/04_siu_run.png)
-![screenshot of opened tabs](https://raw.githubusercontent.com/chutified/siu/master/img/05_siu_browser.png)
+![screenshot of siu run](https://raw.githubusercontent.com/chutommy/siu-cli/master/img/04_siu_run.png)
+![screenshot of opened tabs](https://raw.githubusercontent.com/chutommy/siu-cli/master/img/05_siu_browser.png)
